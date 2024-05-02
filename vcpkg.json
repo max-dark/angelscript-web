@@ -1,0 +1,12 @@
+{
+  "name": "web-script",
+  "version-semver": "0.0.1",
+  "dependencies": [
+    {
+      "name": "angelscript",
+      "features": [
+        "addons"
+      ]
+    }
+  ]
+}
