@@ -5,6 +5,7 @@ project(web_script)
 # EMSCRIPTEN_ROOT=/usr/share/emscripten
 
 # cmake params
+# -DCMAKE_C_COMPILER=/usr/bin/emcc -DCMAKE_CXX_COMPILER=/usr/bin/em++
 # -DVCPKG_TARGET_TRIPLET=wasm32-emscripten -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 set(CMAKE_EXECUTABLE_SUFFIX .js)
