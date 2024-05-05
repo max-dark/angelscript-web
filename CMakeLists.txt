@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.20)
 project(web_script)
 
 # ENV - set path to emsdk see wasm32-emscripten
