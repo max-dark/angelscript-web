@@ -1,5 +1,6 @@
 #include <iostream>
 #include <emscripten.h>
+#include <emscripten/val.h>
 #include <string>
 #include <cassert>
 
@@ -44,6 +45,39 @@ void ret_check(int r, const char* msg = "error")
         throw std::runtime_error(msg);
 }
 
+EM_JS(void, get_input, (), {
+    console.log("get_input> " + elem.get_input())
+})
+
+void get_input_gen(asIScriptGeneric* gen)
+{
+    std::string tmp;
+    using emscripten::val;
+    auto elem = val::global("elem");
+
+    if (! elem.isUndefined())
+    {
+        tmp = elem.call<std::string>("get_input");
+    }
+
+    auto ret = gen->GetAddressOfReturnLocation();
+    new(ret) std::string{tmp};
+}
+
+std::string get_script()
+{
+    using emscripten::val;
+    auto elem = val::global("elem");
+
+    if (! elem.isUndefined())
+    {
+        return elem.call<std::string>("get_script");
+    }
+    std::cout << "Unable get script code" << std::endl;
+    return "";
+}
+
+EMSCRIPTEN_KEEPALIVE
 void run_script(const std::string& code)
 {
     auto engine = asCreateScriptEngine();
@@ -57,14 +91,15 @@ void run_script(const std::string& code)
     RegisterStdStringUtils(engine);
     RegisterScriptDictionary(engine);
 
-    {
-        int r;
-        r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print_generic), asCALL_GENERIC);
-        assert(r >= 0);
-    }
     try
     {
+        // use asCALL_GENERIC since WebAsm do not support other
         int r;
+        r = engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(print_generic), asCALL_GENERIC);
+        ret_check(r, "register print fail");
+        r = engine->RegisterGlobalFunction("string get_input()", asFUNCTION(get_input_gen), asCALL_GENERIC);
+        ret_check(r, "register get_input fail");
+
         CScriptBuilder builder;
         r = builder.StartNewModule(engine, "main");
         ret_check(r, "start module fail");
@@ -82,9 +117,9 @@ void run_script(const std::string& code)
         try
         {
             r = ctx->Prepare(func);
-            std::cout << "Prepare: " << r << std::endl;
+            ret_check(r, "prepare fail");
             r = ctx->Execute();
-            std::cout << "Exec: " << r << std::endl;
+            //std::cout << "Exec: " << r << std::endl;
             if (r != asEXECUTION_FINISHED) {
                 if (r == asEXECUTION_EXCEPTION) {
                     std::cerr << "Exception: " << ctx->GetExceptionString() << std::endl;
@@ -105,9 +140,16 @@ void run_script(const std::string& code)
     engine->ShutDownAndRelease();
 }
 
+const std::string def_script = R"(void main() {
+    string inp = get_input();
+    print("From script: " + inp);
+})";
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    run_script(R"(void main(){ print("From script"); })");
+    std::cout << "Start script:" << std::endl;
+    get_input();
+    auto script = get_script();
+    run_script(script.empty() ? def_script: script);
     return 0;
 }
 

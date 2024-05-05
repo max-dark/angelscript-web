@@ -13,7 +13,13 @@
 <table>
     <tr>
         <td>
-            <label for="source">source</label><br/><textarea id="source" cols="80" rows="40"></textarea>
+            <label for="source">source</label><br/>
+            <textarea id="source" cols="80" rows="40">
+void main()
+{
+print("Hello, " + get_input());
+}
+            </textarea>
         </td>
     </tr>
     <tr>
@@ -23,7 +29,7 @@
     </tr>
     <tr>
         <td>
-            <label for="input">input</label><br/><textarea id="input" cols="80"></textarea>
+            <label for="input">input</label><br/><textarea id="input" cols="80">World</textarea>
         </td>
     </tr>
     <tr>
@@ -34,7 +40,7 @@
     </tr>
 </table>
 <script>
-    const elem = {
+    elem = {
         source: document.getElementById("source"),
         input: document.getElementById("input"),
         output: document.getElementById("output"),
@@ -45,6 +51,12 @@
         },
         clear_out: function () {
             this.output.innerText = ""
+        },
+        get_input: function () {
+            return this.input.value + "";
+        },
+        get_script: function () {
+            return this.source.value + "";
         }
     };
     // for Emscripten see https://emscripten.org/docs/api_reference/module.html

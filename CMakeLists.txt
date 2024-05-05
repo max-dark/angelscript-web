@@ -11,7 +11,12 @@ project(web_script)
 set(CMAKE_EXECUTABLE_SUFFIX .js)
 set(CMAKE_CXX_STANDARD 17)
 
+# find_package(Emscripten)
 find_package(Angelscript CONFIG REQUIRED)
 
 add_executable(web_script main.cpp)
-target_link_libraries(web_script PRIVATE Angelscript::angelscript)
+target_link_libraries(web_script
+    PRIVATE
+        Angelscript::angelscript
+        embind
+)
