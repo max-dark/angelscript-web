@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css" media="screen">
+        #editor {
+            /*position: absolute;*/
+            width: 100%;
+            min-width: 600px;
+            min-height: 200px;
+            /*top: 0;*/
+            /*right: 0;*/
+            /*bottom: 0;*/
+            /*left: 0;*/
+        }
+    </style>
+</head>
+<body>
+<div id="editor"></div>
+<div><button id="btn">test</button></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.33.1/ace.js" integrity="sha512-WN1CEDE9Js0mEqvtRrNS7GHS+arRJxWVO03zttkQQXEQjwGVcHQ2kMja415m0bNeB3AtYsyjUWJ1BS4wGLta/Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    var edit = ace.edit("editor", {
+        mode: "ace/mode/d"
+    })
+    //edit.setMode("ace/mode/cpp")
+    var btn_run = document.getElementById("btn")
+    btn_run.addEventListener("click", function () {
+        console.log(edit.getValue())
+    })
+</script>
+</body>
+</html>
