@@ -2,6 +2,8 @@ AngelScript interpreter for WASM
 
 How to build
 
+see `build.sh`
+
 install vcpkg
 ```shell
 git clone https://github.com/microsoft/vcpkg.git

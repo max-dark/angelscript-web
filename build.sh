@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# requirements:
+# apt install cmake emscripten
+#
+# install vcpkg
+# git clone https://github.com/microsoft/vcpkg.git
+# cd vcpkg
+# ./bootstrap.sh -disableMetrics
+# export VCPKG_ROOT=`pwd`
+
+# used by vcpkg for wasm target
 export EMSCRIPTEN_ROOT=/usr/share/emscripten
 
 cmake -S . -B build \
